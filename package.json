@@ -27,6 +27,7 @@
     "hono": "^4.7.4",
     "lucide-react": "^0.482.0",
     "next": "15.2.2",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
@@ -37,14 +38,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.0.15",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
     "prisma": "^6.5.0",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.0.15",
     "tsx": "^4.19.3",
     "typescript": "^5"
   }
