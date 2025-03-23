@@ -2,7 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Mail, MapPin, AtSign, Info, BadgeIcon as IdCard , Share2 } from "lucide-react"
+
+import { Mail, MapPin, Info , Share2 } from "lucide-react"
 import { FaHashtag } from "react-icons/fa"
 
 interface UserProfileProps {
@@ -34,7 +35,7 @@ export function UserProfile({ user,tags }: UserProfileProps) {
           <div className="text-center space-y-1  ">
             <h2 className="text-2xl font-bold">{user.name}</h2>
             <div className="flex flex-row justify-center items-center space-x-2">
-            <Badge variant="outline" className="px-3 py-1">
+            <Badge variant="outline" className="px-3 py-1 flex justify-center items-center">
               
               {user.username}
             </Badge>
@@ -45,11 +46,11 @@ export function UserProfile({ user,tags }: UserProfileProps) {
           </div>
         </CardHeader>
 
-        <div className="flex flex-row flex-wrap justify-center items-center space-x-4 space-y-2">
+        <div className="flex flex-row flex-wrap justify-center space-x-4 space-y-2 p-3">
         {tags && 
           tags?.map(tag => (
           <Badge variant="secondary" className="px-2 py-1" key={tag.id}>
-            <FaHashtag className="h-4 w-4 mr-2" />
+            <FaHashtag className="h-2 w-2 mr-2" />
             {tag.name}
           </Badge>
           ))}
@@ -94,6 +95,9 @@ export function UserProfile({ user,tags }: UserProfileProps) {
         </CardContent>
       </Card>
       <div className="flex-1"></div>
+
+      {/* <AddTech/> */}
+    
     </div>
   )
 }

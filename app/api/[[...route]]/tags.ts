@@ -20,25 +20,23 @@ const app = new Hono()
     })
 
     .get("/user", clerkMiddleware(), async (ctx) => {
-      const auth = getAuth(ctx);
-      if (!auth || !auth.userId) {
-        return ctx.json({ error: "Unauthorized" }, 401);
-      }
-    
       try {
+        const auth = getAuth(ctx);
+        if (!auth?.userId) {
+          return ctx.json({ error: "Unauthorized" }, 401);
+        }
+    
+        
+    
+        // Fetch all tags since at least one exists
         const userTags = await db.user_tags.findMany({
           where: { user_id: auth.userId },
-          select: {
-            tag_id: true,
-            tags: {
-              select: { name: true },
-            },
-          },
+          include: { tags: true },
         });
     
         const tagsData = userTags.map((tag) => ({
           id: tag.tag_id,
-          name: tag.tags.name,
+          name: tag.tags?.name || "Unknown", // Handle potential null values
         }));
     
         return ctx.json({ tagsData });
@@ -47,7 +45,9 @@ const app = new Hono()
         return ctx.json({ error: "Internal Server Error" }, 500);
       }
     })
-
+    
+    
+    
     .post(
         "/update",
         clerkMiddleware(),

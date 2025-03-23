@@ -1,10 +1,10 @@
-'use client'
-import EditTagsForm from "@/components/EditTagsForm";
+import MetadataFetcher from "@/components/AddTech";
 export default function Home() {
  
   return (
     <main className="">
-      <EditTagsForm />
+      
+      <MetadataFetcher/>
       
     </main>
   );

@@ -17,7 +17,7 @@ export default function RootLayout({
         
       >
         <QueryProviders>
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
         </QueryProviders>
       </body>
