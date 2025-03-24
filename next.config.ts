@@ -2,7 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["img.clerk.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // Allows images from any domain
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,

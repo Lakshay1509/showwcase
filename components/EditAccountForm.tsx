@@ -50,17 +50,17 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
       try {
         const response = await fetch("https://api.first.org/data/v1/countries");
         const data = await response.json();
-        
+
         // Transform the data to include the code
         const transformedData: Record<string, Country> = {};
         Object.entries(data.data).forEach(([code, info]: [string, any]) => {
           transformedData[code] = {
             code,
             country: info.country,
-            region: info.region
+            region: info.region,
           };
         });
-        
+
         setCountries(transformedData);
       } catch (error) {
         console.error("Failed to fetch countries", error);
@@ -79,11 +79,10 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
       description: "",
     },
   });
-  
+
   return (
     <div className="flex items-center justify-center w-full">
       <Card className="w-full max-w-2xl mx-auto">
-        
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -116,7 +115,10 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
                             </SelectItem>
                           ) : (
                             Object.values(countries).map((country) => (
-                              <SelectItem key={country.code} value={country.country}>
+                              <SelectItem
+                                key={country.code}
+                                value={country.country}
+                              >
                                 {country.country}
                               </SelectItem>
                             ))
@@ -124,9 +126,7 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription>
-                      Edit your country
-                    </FormDescription>
+                    <FormDescription>Edit your country</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -137,10 +137,12 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground">Description</FormLabel>
+                    <FormLabel className="text-foreground">
+                      Description
+                    </FormLabel>
                     <FormControl>
-                      <Textarea 
-                        {...field} 
+                      <Textarea
+                        {...field}
                         placeholder="Tell us about yourself"
                         className="min-h-24 resize-none focus:ring-2 focus:ring-primary/20"
                       />
@@ -153,9 +155,9 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
                 )}
               />
             </CardContent>
-            
+
             <CardFooter className="flex justify-end border-t pt-4">
-              <Button 
+              <Button
                 type="submit"
                 className="w-full sm:w-auto px-8 transition-all hover:scale-105"
                 disabled={form.formState.isSubmitting}

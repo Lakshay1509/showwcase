@@ -1,11 +1,12 @@
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+import MetadataForm from "./AddTech";
 
 
 
@@ -15,17 +16,15 @@ const AddTechStack = () => {
     <div>
       <Sheet >
         <SheetTrigger>
-         <div className="px-2 py-1 bg-black text-white rounded-lg ">Add Tech Stack</div>
+         <div className="px-2 py-1 bg-black text-white rounded-lg text-sm ">Add</div>
         </SheetTrigger>
-        <SheetContent >
-          <SheetHeader>
-            <SheetTitle>Add the url of the tool to add</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </SheetDescription>
+        <SheetContent className="p-1">
+        <SheetHeader>
+        <SheetTitle>Add the url of the tool to add</SheetTitle>
+        
           </SheetHeader>
-          Hello
+            <MetadataForm />
+          
         </SheetContent>
       </Sheet>
     </div>

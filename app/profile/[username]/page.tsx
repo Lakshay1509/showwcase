@@ -11,6 +11,7 @@ import { useState } from "react";
 import AddTechStack from "@/components/AddTechStack";
 import EditTagsForm from "@/components/EditTagsForm";
 import { useGetTagsByUser } from "@/features/tags/use-get-byUser";
+import Loader from "@/components/Loader";
 
 export default function DynamicPage() {
   const { user } = useUser();
@@ -28,8 +29,13 @@ export default function DynamicPage() {
   const { data,  } = useGetUsername(name);
   const { data: tagsData,  } = useGetTagsByUser();
 
-  if (!data) {
-    return <div>Loading...</div>;
+  if (!data || !tagsData) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+    <Loader />
+    </div>
+    
+  )
   }
 
   const formSchema = z.object({
@@ -45,7 +51,7 @@ export default function DynamicPage() {
   };
 
   return (
-    <main className="min-h-screen mt-12 w-full py-12 px-4 bg-background flex flex-row ">
+    <main className="min-h-screen mt-12 w-full py-12 px-4 bg-background flex flex-col lg:flex-row ">
       <div className="">
         <div className="max-w-7xl mx-auto">
           <UserProfile user={data.user} tags={tagsData?.tagsData || []} />
@@ -100,14 +106,14 @@ export default function DynamicPage() {
           </div>
         )}
       </div>
-      {/* Right column content */}
-      <div className="flex flex-col w-[70%]">
-        {/* Tech stack container */}
+      
+      <div className="flex flex-col w-[100%] lg:w-[70%]">
+       
         <div className="flex justify-end flex-wrap">
           <AddTechStack />
         </div>
 
-        {/* <div className="w-full flex justify-end">Hello</div> */}
+       
       </div>
     </main>
   );

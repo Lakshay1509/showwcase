@@ -26,6 +26,24 @@ app.post("/", async (c) => {
     // Get OG image
     const ogImage = $('meta[property="og:image"]').attr("content") || "";
     
+    // Get website name
+    let websiteName = $('meta[property="og:site_name"]').attr("content") || 
+                      $('meta[name="application-name"]').attr("content");
+    
+    // If no metadata name found, extract from hostname
+    if (!websiteName) {
+      const hostname = new URL(url).hostname.replace(/^www\./, '');
+      // Get the domain name without the TLD
+      const parts = hostname.split('.');
+      if (parts.length >= 2) {
+        websiteName = parts[parts.length - 2]; // Take the second-to-last part (e.g., "shadcn" from "ui.shadcn.com")
+        // Capitalize first letter
+        websiteName = websiteName.charAt(0).toUpperCase() + websiteName.slice(1);
+      } else {
+        websiteName = hostname;
+      }
+    }
+    
     // Get favicon path
     let faviconPath =
       $('link[rel="icon"]').attr('href') ||
@@ -43,7 +61,7 @@ app.post("/", async (c) => {
       }
     }
 
-    return c.json({ title, description, ogImage, faviconPath }, 200);
+    return c.json({ title, description, ogImage, faviconPath, websiteName }, 200);
   } catch (err) {
     return c.json({ err: 500});
   }

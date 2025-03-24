@@ -1,60 +1,56 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model users {
-  id              String  @id @default(uuid()) @map("id")
-  username        String  @unique @map("username")
-  email           String  @unique @map("email")
-  name            String
-  description     String?
-  location        String?
-  profileImageUrl String? @map("profile_image_url")
-
+  id                   String                @id @default(uuid()) @map("id")
+  username             String                @unique @map("username")
+  email                String                @unique @map("email")
+  name                 String
+  description          String?
+  location             String?
+  profileImageUrl      String?               @map("profile_image_url")
   social_media_handles social_media_handles?
   user_tags            user_tags[]
 }
 
 model social_media_handles {
-  id              String  @id @default(uuid()) @map("id")
-  user_id         String  @unique @map("user_id")
-  instagram       String?
-  linkedin        String?
-  twitter         String?
-  github          String?
-  facebook        String?
-  youtube         String?
+  id               String  @id @default(uuid()) @map("id")
+  user_id          String  @unique @map("user_id")
+  instagram        String?
+  linkedin         String?
+  twitter          String?
+  github           String?
+  facebook         String?
+  youtube          String?
   personal_website String? @map("personal_website")
-
-  users           users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  users            users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model tags {
-  id      Int    @id @default(autoincrement()) @map("id")
-  name    String @unique @map("name")
-
+  id        Int         @id @default(autoincrement()) @map("id")
+  name      String      @unique @map("name")
   user_tags user_tags[]
 }
 
 model user_tags {
   user_id String @map("user_id")
   tag_id  Int    @map("tag_id")
+  tags    tags   @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  users users @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  tags  tags  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
-
-  @@id([user_id, tag_id]) // Composite Primary Key
+  @@id([user_id, tag_id])
   @@map("user_tags")
+}
+
+model tech {
+  id      Int    @id @default(autoincrement()) @map("id")
+  name    String @unique @map("name")
+  img_url String? @unique
 }
