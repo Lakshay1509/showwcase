@@ -9,15 +9,16 @@ datasource db {
 }
 
 model users {
-  id                   String                @id @default(uuid()) @map("id")
-  username             String                @unique @map("username")
-  email                String                @unique @map("email")
-  name                 String
-  description          String?
-  location             String?
-  profileImageUrl      String?               @map("profile_image_url")
+  id         String   @id @default(uuid()) @map("id")
+  username   String   @unique @map("username")
+  email      String   @unique @map("email")
+  name       String
+  description String?
+  location   String?
+  profileImageUrl String? @map("profile_image_url")
   social_media_handles social_media_handles?
-  user_tags            user_tags[]
+  user_tags  user_tags[]
+  groups     groups[]  // Added relation field
 }
 
 model social_media_handles {
@@ -50,7 +51,32 @@ model user_tags {
 }
 
 model tech {
-  id      Int    @id @default(autoincrement()) @map("id")
-  name    String @unique @map("name")
-  img_url String? @unique
+  id         Int      @id @default(autoincrement()) @map("id")
+  name       String   @unique @map("name")
+  img_url    String?  @unique
+  group_techs group_techs[]  // Added relation field
 }
+
+model groups {
+  id       String @id @default(uuid()) @map("id")
+  user_id  String @map("user_id")
+  name     String @map("name")
+
+  users    users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  group_techs group_techs[]
+
+  @@map("groups")
+}
+
+model group_techs {
+  group_id String @map("group_id")
+  tech_id  Int    @map("tech_id")
+
+  groups groups @relation(fields: [group_id], references: [id], onDelete: Cascade)
+  tech   tech   @relation(fields: [tech_id], references: [id], onDelete: Cascade)
+
+  @@id([group_id, tech_id])
+  @@map("group_techs")
+}
+
+

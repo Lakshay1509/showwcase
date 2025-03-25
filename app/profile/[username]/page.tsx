@@ -12,6 +12,9 @@ import AddTechStack from "@/components/AddTechStack";
 import EditTagsForm from "@/components/EditTagsForm";
 import { useGetTagsByUser } from "@/features/tags/use-get-byUser";
 import Loader from "@/components/Loader";
+import TechGroup from "@/components/TechGroup";
+import AddGroup from "@/components/AddGroupSheet";
+import { useGetUserGroup } from "@/features/group/use-get-byuser";
 
 export default function DynamicPage() {
   const { user } = useUser();
@@ -27,6 +30,7 @@ export default function DynamicPage() {
 
   const name = decodeURIComponent(rawName);
   const { data,  } = useGetUsername(name);
+  const {data:GroupsData} = useGetUserGroup(name);
   const { data: tagsData,  } = useGetTagsByUser();
 
   if (!data || !tagsData) {
@@ -109,9 +113,19 @@ export default function DynamicPage() {
       
       <div className="flex flex-col w-[100%] lg:w-[70%]">
        
-        <div className="flex justify-end flex-wrap">
+        <div className="flex justify-end flex-wrap space-x-2" >
           <AddTechStack />
+          <AddGroup />
         </div>
+
+
+        {GroupsData && GroupsData.techGroups.map((group) => (
+  <TechGroup 
+    key={group.id}
+    name={group.name}
+    techs={group.techs}
+  />
+))}
 
        
       </div>

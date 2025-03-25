@@ -4,6 +4,7 @@ import profile from "./profile";
 import tags from "./tags";
 import fetchMetadata from "./fetch-metadata";
 import tech from "./tech";
+import group from './group'
 
 export const runtime = "nodejs";
 const app = new Hono().basePath("/api");
@@ -13,7 +14,8 @@ const routes = app
     .route("/profile", profile)
     .route("/tags", tags)
     .route("/fetch-metadata", fetchMetadata)
-    .route("/tech", tech);
+    .route("/tech", tech)
+    .route("/group",group);
 
 export const GET = handle(app);
 export const POST = handle(app);

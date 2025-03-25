@@ -16,7 +16,7 @@ const AddTechStack = () => {
     <div>
       <Sheet >
         <SheetTrigger>
-         <div className="px-2 py-1 bg-black text-white rounded-lg text-sm ">Add</div>
+         <div className="px-2 py-1 bg-black text-white rounded-lg text-sm ">Add Tool</div>
         </SheetTrigger>
         <SheetContent className="p-1">
         <SheetHeader>

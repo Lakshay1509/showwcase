@@ -46,10 +46,10 @@ export function UserProfile({ user,tags }: UserProfileProps) {
           </div>
         </CardHeader>
 
-        <div className="flex flex-row flex-wrap justify-center space-x-4 space-y-2 p-3">
+        <div className="flex flex-row flex-wrap justify-center space-x-4 space-y-3 p-3">
         {tags && 
           tags?.map(tag => (
-          <Badge variant="secondary" className="px-2 py-1" key={tag.id}>
+          <Badge variant="secondary" className="px-2 py-2" key={tag.id}>
             <FaHashtag className="h-2 w-2 mr-2" />
             {tag.name}
           </Badge>
@@ -62,21 +62,21 @@ export function UserProfile({ user,tags }: UserProfileProps) {
           
           <div className="space-y-3">
             <div className="flex items-center">
-              <Mail className="h-4 w-4 mr-2 text-primary" />
-              <p className="text-sm font-medium">Email</p>
-            </div>
-            <a href={`mailto:${user.email}`} className="text-primary hover:underline pl-6">
+              <Mail className="h-4 w-4 mr-2 " />
+              <a href={`mailto:${user.email}`} className="hover:underline pl-2 text-sm">
               {user.email}
             </a>
+            </div>
+            
           </div>
 
           {user.location && (
             <div className="space-y-3">
               <div className="flex items-center">
-                <MapPin className="h-4 w-4 mr-2 text-primary" />
-                <p className="text-sm font-medium">Location</p>
+                <MapPin className="h-4 w-4 mr-2 " />
+                <p className="text-sm pl-2 ">{user.location}</p>
               </div>
-              <p className="text-sm pl-6">{user.location}</p>
+              
             </div>
           )}
 

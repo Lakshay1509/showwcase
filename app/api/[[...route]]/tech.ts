@@ -32,6 +32,24 @@ const app = new Hono()
             return ctx.json({ error: "Internal Server Error." }, 500);
         }
     })
+    .get("/",clerkMiddleware(),async(ctx)=>{
+
+        const auth = getAuth(ctx);
+
+        if(!auth){
+            return ctx.json({error:"Unauthorized"},401)
+        }
+
+        try{
+            const techs = await db.tech.findMany();
+            return ctx.json({techs})
+        }
+        catch(error){
+            console.error("Error fetching techs:",error);
+            return ctx.json({error:"Internal Server Error"},500)
+        }
+
+    })
 
 
 

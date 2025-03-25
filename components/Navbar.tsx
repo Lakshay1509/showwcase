@@ -7,7 +7,7 @@ const Navbar = () => {
   const { isSignedIn } = useAuth();
   
   return (
-    <header className="fixed  inset-x-0 top-0 z-30 w-full bg-gradient-to-r from-gray-900 via-black to-gray-900 py-4 shadow-lg backdrop-blur-md border-b border-gray-800/50">
+    <header className="fixed  inset-x-0 top-0 z-30 w-full py-4 shadow-lg backdrop-blur-md ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex shrink-0">
