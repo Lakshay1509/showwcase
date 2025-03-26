@@ -17,6 +17,7 @@ import TechForm from "./TechForm";
 import { useCreateTech } from "@/features/tech/use-add-tech";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 // Define form schema with Zod
 const formSchema = z.object({
@@ -65,12 +66,13 @@ export default function MetadataForm() {
     
     mutation.mutate(values, {
       onSuccess: () => {
-        setSuccess("Technology added successfully!");
-        setMetadata(null); // Reset form after successful submission
+        toast.success("Tech added successfully");
         form.reset();
       },
       onError: (error) => {
-        setError(error.message || "Failed to add technology. Please try again.");
+        toast.error("Failed to add tech");
+        setError(error.message);
+        
       },
     });
   }

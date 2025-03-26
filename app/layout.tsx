@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import { QueryProviders } from "@/providers/query-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -17,6 +18,7 @@ export default function RootLayout({
         
       >
         <QueryProviders>
+        <Toaster richColors theme="dark" />
         <Navbar />
         {children}
         </QueryProviders>

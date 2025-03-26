@@ -82,6 +82,61 @@ const app = new Hono()
       console.error("Error fetching tech groups:", error);
       return ctx.json({ error: "Internal Server Error" }, 500);
     }
-  });
+  })
+  .post(
+    "/update/:id",clerkMiddleware(),zValidator(
+      "json",
+      z.array(
+        z.object({
+          id: z.number(),
+        })
+      )
+    ),
+    async (ctx) => {
+      const auth = getAuth(ctx);
+      const newTech = ctx.req.valid("json");
+  
+      if (!auth || !auth.userId) {
+        return ctx.json({ error: "Unauthorized" }, 401);
+      }
+  
+      
+      const existingTags = await db.group_techs.findMany({
+        where: { group_id: ctx.req.param("id") },
+        select: { tech_id: true },
+      });
+  
+      const existingTagIds = existingTags.map((tech) => tech.tech_id);
+      const newTagIds = newTech.map((tech) => tech.id);
+  
+      
+      const tagsToDelete = existingTagIds.filter((id) => !newTagIds.includes(id));
+  
+      
+      const tagsToInsert = newTagIds.filter((id) => !existingTagIds.includes(id));
+  
+      
+      if (tagsToDelete.length > 0) {
+        await db.group_techs.deleteMany({
+          where: {
+            group_id: ctx.req.param("id"),
+            tech_id: { in: tagsToDelete },
+          },
+        });
+      }
+  
+      
+      if (tagsToInsert.length > 0) {
+        await db.group_techs.createMany({
+          data: tagsToInsert.map((tagId) => ({
+            group_id: ctx.req.param("id"),
+            tech_id: tagId,
+          })),
+        });
+      }
+  
+      return ctx.json({ success: true });
+    }
+  )
 
 export default app;

@@ -11,6 +11,7 @@ import {
 import MultiSelectForm from "./MultiSelectForm";
   
   interface EditTechSheetProps {
+    id : string;
     name: string;
     techs: {
       id: number;
@@ -19,7 +20,7 @@ import MultiSelectForm from "./MultiSelectForm";
     }[];
   }
   
-  const EditTechSheet = ({ name, techs }: EditTechSheetProps) => {
+  const EditTechSheet = ({ name, techs,id }: EditTechSheetProps) => {
 
     const techIds = techs.map(tech => String(tech.id));
 
@@ -39,7 +40,7 @@ import MultiSelectForm from "./MultiSelectForm";
               Manage technologies in the {name} group
             </SheetDescription>
           </SheetHeader>
-          <MultiSelectForm defaultValues={techIds}/>
+          <MultiSelectForm defaultValues={techIds} id={id}/>
         </SheetContent>
       </Sheet>
     );

@@ -5,7 +5,7 @@ import { client } from "@/lib/hono";
 export const useGetUserGroup = (username: string) => {
   const query = useQuery({
     enabled: !!username,
-    queryKey: ["group", { username }],
+    queryKey: ['group', { username }],
     queryFn: async () => {
       const response = await client.api.group.user[":username"].$get({
         param: { username },

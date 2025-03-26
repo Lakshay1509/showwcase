@@ -20,7 +20,6 @@ export default function DynamicPage() {
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
-  
 
   const mutation = useEditAccount(user?.id || " ");
   const params = useParams();
@@ -29,17 +28,16 @@ export default function DynamicPage() {
     : params?.username || "Guest";
 
   const name = decodeURIComponent(rawName);
-  const { data,  } = useGetUsername(name);
-  const {data:GroupsData} = useGetUserGroup(name);
-  const { data: tagsData,  } = useGetTagsByUser();
+  const { data ,isFetching:userFetching } = useGetUsername(name);
+  const { data: GroupsData, isLoading: GroupsLoading, isFetching } = useGetUserGroup(name);
+  const { data: tagsData } = useGetTagsByUser();
 
-  if (!data || !tagsData) {
+  if (!data || !tagsData || userFetching) {
     return (
       <div className="flex justify-center items-center h-screen">
-    <Loader />
-    </div>
-    
-  )
+        <Loader />
+      </div>
+    );
   }
 
   const formSchema = z.object({
@@ -51,7 +49,9 @@ export default function DynamicPage() {
 
   const onSubmit = (values: FormValues) => {
     mutation.mutate(values);
-    setIsModalOpen(false); // Close modal after submission
+    if(mutation.isSuccess){
+    setIsModalOpen(false);
+  } 
   };
 
   return (
@@ -89,7 +89,7 @@ export default function DynamicPage() {
                   ✕
                 </button>
               </div>
-              <EditAccount onSubmit={onSubmit} />
+              <EditAccount onSubmit={onSubmit} description={data.user.description} disabled={mutation.isPending} />
             </div>
           </div>
         )}
@@ -110,24 +110,30 @@ export default function DynamicPage() {
           </div>
         )}
       </div>
-      
+
       <div className="flex flex-col w-[100%] lg:w-[70%]">
-       
-        <div className="flex justify-end flex-wrap space-x-2" >
+        <div className="flex justify-end flex-wrap space-x-2">
           <AddTechStack />
           <AddGroup />
         </div>
 
-
-        {GroupsData && GroupsData.techGroups.map((group) => (
-  <TechGroup 
-    key={group.id}
-    name={group.name}
-    techs={group.techs}
-  />
-))}
-
-       
+        {(GroupsLoading || isFetching) && (
+  <div className="flex justify-center items-center">
+    <Loader />
+  </div>
+)}
+        <div className="mt-8">
+          {!GroupsLoading && !isFetching &&
+            GroupsData &&
+            GroupsData.techGroups.map((group) => (
+              <TechGroup
+                id={group.id}
+                key={group.id}
+                name={group.name}
+                techs={group.techs}
+              />
+            ))}
+        </div>
       </div>
     </main>
   );

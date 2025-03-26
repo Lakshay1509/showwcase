@@ -1,25 +1,21 @@
 import { InferRequestType,InferResponseType } from "hono";
 import { useMutation,useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
 import {client} from "@/lib/hono"
 
 
-type ResponseType = InferResponseType<(typeof client.api.profile.update)[":id"]["$patch"]>
-type RequestType = InferRequestType<(typeof client.api.profile.update)[":id"]["$patch"]>["json"]
+type ResponseType = InferResponseType<(typeof client.api.group.update)[":id"]["$post"]>
+type RequestType = InferRequestType<(typeof client.api.group.update)[":id"]["$post"]>["json"]
 
-export const useEditAccount = (id:string)=>{
+export const useUpdateTech = (id:string)=>{
 
-    // if(id === " "){
-    //     throw new Error("User id is required");
-    // }
 
     const queryClient = useQueryClient();
 
     return useMutation<ResponseType,Error,RequestType>
     ({
         mutationFn : async(json)=>{
-            const response = await client.api.profile.update[":id"]["$patch"]({
+            const response = await client.api.group.update[":id"]["$post"]({
                 json,
                 param:{
                     id
@@ -28,15 +24,15 @@ export const useEditAccount = (id:string)=>{
 
             return response.json();
         },
+        
         onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['users']});
-            toast.success("Account updated successfully");
-            
+            queryClient.invalidateQueries({queryKey:['group']});
+            toast.success("Tech updated.");
         },
         onError:(error)=>{
             console.error(error);
-            toast.error("Failed to update account");
+            toast.error("Failed to update tech");
             
         }
     })

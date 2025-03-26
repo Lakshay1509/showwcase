@@ -5,6 +5,7 @@ import EditTechSheet from "./EditTechSheet";
 
 
 interface TechGroup {
+  id: string,
   name: string,
   techs: {
     id: number,
@@ -13,13 +14,13 @@ interface TechGroup {
   }[]
 }
 
-const TechGroup = ({name, techs}: TechGroup) => {
+const TechGroup = ({name, techs ,id}: TechGroup) => {
   return (
-    <main className="lg:p-6 flex flex-col space-y-2 lg:space-y-8 ">
+    <main className="px-6 py-3 flex flex-col space-y-2  ">
       <div>
         <div className="flex flex-row w-full items-center justify-between">
         <h1 className="lg:text-2xl px-2 text-gray-500">{name}</h1>
-        <EditTechSheet name={name} techs={techs} />
+        <EditTechSheet name={name} techs={techs} id={id} />
         </div>
         <Separator />
 

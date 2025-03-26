@@ -32,6 +32,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 type AccountFormProps = {
   onSubmit: (values: FormValues) => void;
+  description: string | null;
+  disabled?: boolean;
+  
 };
 
 type Country = {
@@ -40,7 +43,7 @@ type Country = {
   region: string;
 };
 
-const EditAccount = ({ onSubmit }: AccountFormProps) => {
+const EditAccount = ({ onSubmit,description,disabled }: AccountFormProps) => {
   const [countries, setCountries] = useState<Record<string, Country>>({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,10 +77,6 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      location: "",
-      description: "",
-    },
   });
 
   return (
@@ -103,7 +102,7 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={isLoading}
+                        disabled={disabled}
                       >
                         <SelectTrigger className="focus:ring-2 focus:ring-primary/20">
                           <SelectValue placeholder="Select your country" />
@@ -134,7 +133,9 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
 
               <FormField
                 name="description"
+                disabled={disabled}
                 control={form.control}
+                defaultValue={description || ''}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-foreground">
@@ -160,9 +161,9 @@ const EditAccount = ({ onSubmit }: AccountFormProps) => {
               <Button
                 type="submit"
                 className="w-full sm:w-auto px-8 transition-all hover:scale-105"
-                disabled={form.formState.isSubmitting}
+                disabled={disabled}
               >
-                {form.formState.isSubmitting ? "Submitting..." : "Save Profile"}
+                {disabled ? "Submitting..." : "Save Profile"}
               </Button>
             </CardFooter>
           </form>

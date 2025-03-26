@@ -12,8 +12,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex shrink-0">
             <Link aria-current="page" className="flex items-center group" href="/">
-              <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent text-3xl font-bold tracking-tight hover:from-blue-400 hover:to-purple-400 transition-all duration-300">
-                ShowwCase
+              <span className=" text-3xl font-bold ">
+                showWcase
               </span>
             </Link>
           </div>
