@@ -30,7 +30,7 @@ import MultiSelectForm from "./MultiSelectForm";
         <SheetTrigger asChild>
           <Button variant="ghost" size="sm" className="flex items-center gap-1">
             <Pencil className="h-4 w-4" />
-            Edit
+            
           </Button>
         </SheetTrigger>
         <SheetContent>

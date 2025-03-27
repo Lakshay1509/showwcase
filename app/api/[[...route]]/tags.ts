@@ -19,18 +19,23 @@ const app = new Hono()
         }
     })
 
-    .get("/user", clerkMiddleware(), async (ctx) => {
+
+    .get("/user/:username", clerkMiddleware(), async (ctx) => {
       try {
-        const auth = getAuth(ctx);
-        if (!auth?.userId) {
-          return ctx.json({ error: "Unauthorized" }, 401);
+        const username = ctx.req.param("username");
+
+        const user = await db.users.findUnique({
+          where: { username },
+          select: { id: true },
+        });
+  
+        if (!user) {
+          return ctx.json({ error: "User not found" }, 404);
         }
-    
-        
-    
-        // Fetch all tags since at least one exists
+  
+
         const userTags = await db.user_tags.findMany({
-          where: { user_id: auth.userId },
+          where: { user_id: user.id },
           include: { tags: true },
         });
     

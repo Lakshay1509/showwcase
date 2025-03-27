@@ -40,6 +40,7 @@ const app = new Hono()
       }
     }
   )
+  
   .get("/user/:username", clerkMiddleware(), async (ctx) => {
     try {
       const username = ctx.req.param("username");
@@ -64,12 +65,17 @@ const app = new Hono()
             },
           },
         },
+        orderBy:{
+          position: 'asc'
+          
+        }
       });
 
       // Format response
       const formattedData = techGroups.map((group) => ({
         id: group.id,
         name: group.name,
+        position : group.position,
         techs: group.group_techs.map((gt) => ({
           id: gt.tech.id,
           name: gt.tech.name,
@@ -138,5 +144,47 @@ const app = new Hono()
       return ctx.json({ success: true });
     }
   )
+  .patch(
+    "/update/:id",clerkMiddleware(),zValidator(
+      "json",
+      z.object({
+        name: z.string().min(3).max(20),
+        position : z.number()
+      })
+    ),
+    async (ctx) => {
+      const auth = getAuth(ctx);
+      const values = ctx.req.valid("json");
+  
+      if (!auth || !auth.userId) {
+        return ctx.json({ error: "Unauthorized" }, 401);
+      }
+  
+      await db.groups.update({
+        where: { id: ctx.req.param("id") },
+        data: values,
+      });
+  
+      return ctx.json({ success: true });
+    }
+  )
+  .delete("/delete/:id", clerkMiddleware(), async (ctx) =>{
+    const auth = getAuth(ctx);
+    if (!auth || !auth.userId) {
+      return ctx.json({ error: "Unauthorized" }, 401);
+    }
+    try{
+     await db.groups.delete({
+      where: { id: ctx.req.param("id") },
+    });
+    return ctx.json({ success: true });
+     }
+    catch(error){
+      return ctx.json({ error: "Internal Server Error" }, 500);
+    }
+  }
+   
+)
+
 
 export default app;

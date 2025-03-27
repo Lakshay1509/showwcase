@@ -2,12 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
 
-export const useGetTagsByUser = () => {
+export const useGetTagsByUser = (username:string) => {
   const query = useQuery({
     
-    queryKey: ["getTagsByUser"],
+    queryKey: ["tags"],
     queryFn: async () => {
-      const response = await client.api.tags.user.$get({
+      const response = await client.api.tags.user[":username"].$get({
+
+        param: { username }
 
       });
 

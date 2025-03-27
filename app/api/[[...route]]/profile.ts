@@ -28,6 +28,7 @@ const app = new Hono()
       return ctx.json({ error: "Internal Server Error." }, 500);
     }
   })
+  
 
   .get("/username/:username",clerkMiddleware(),async (ctx) => {
     const auth = getAuth(ctx);

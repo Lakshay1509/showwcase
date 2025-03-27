@@ -61,6 +61,7 @@ model groups {
   id       String @id @default(uuid()) @map("id")
   user_id  String @map("user_id")
   name     String @map("name")
+  position Int @default(0)
 
   users    users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   group_techs group_techs[]

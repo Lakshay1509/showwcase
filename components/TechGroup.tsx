@@ -2,11 +2,15 @@ import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
 import EditTechSheet from "./EditTechSheet";
+import EditGroup from "./EditNameGroup";
+import DeleteGroup from "./DeleteGroup";
 
 
 interface TechGroup {
   id: string,
   name: string,
+  position: number,
+  renderEdit : boolean,
   techs: {
     id: number,
     name: string,
@@ -14,18 +18,25 @@ interface TechGroup {
   }[]
 }
 
-const TechGroup = ({name, techs ,id}: TechGroup) => {
+const TechGroup = ({name, techs ,id,renderEdit,position}: TechGroup) => {
   return (
-    <main className="px-6 py-3 flex flex-col space-y-2  ">
+    <main className="px-6 py-2 flex flex-col space-y-2  ">
       <div>
         <div className="flex flex-row w-full items-center justify-between">
-        <h1 className="lg:text-2xl px-2 text-gray-500">{name}</h1>
-        <EditTechSheet name={name} techs={techs} id={id} />
+          <div className="flex flex-row items-center justify-center space-x-1">
+        <h1 className="lg:text-xl px-2 text-gray-500">{name}</h1>
+        {renderEdit && <EditGroup name={name} position={position} id={id} maxPosition={techs.length} />}
         </div>
+        <div className="flex flex-row justify-center items-center spaxe-x-2">
+        {renderEdit && <EditTechSheet name={name} techs={techs} id={id} />}
+        {renderEdit && <DeleteGroup id={id} />}
+        </div>
+        </div>
+        
         <Separator />
 
 
-        <div className="p-2 flex flex-row flex-wrap justify-start items-center space-x-3">
+        <div className="p-2 flex flex-row flex-wrap justify-start items-center space-x-3  ">
           {techs && techs.map((tech) => (
             <Badge
               key={tech.id}

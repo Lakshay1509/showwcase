@@ -28,9 +28,13 @@ export default function DynamicPage() {
     : params?.username || "Guest";
 
   const name = decodeURIComponent(rawName);
-  const { data ,isFetching:userFetching } = useGetUsername(name);
-  const { data: GroupsData, isLoading: GroupsLoading, isFetching } = useGetUserGroup(name);
-  const { data: tagsData } = useGetTagsByUser();
+  const { data, isFetching: userFetching } = useGetUsername(name);
+  const {
+    data: GroupsData,
+    isLoading: GroupsLoading,
+    isFetching,
+  } = useGetUserGroup(name);
+  const { data: tagsData } = useGetTagsByUser(name);
 
   if (!data || !tagsData || userFetching) {
     return (
@@ -49,9 +53,9 @@ export default function DynamicPage() {
 
   const onSubmit = (values: FormValues) => {
     mutation.mutate(values);
-    if(mutation.isSuccess){
-    setIsModalOpen(false);
-  } 
+    if (mutation.isSuccess) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -60,21 +64,23 @@ export default function DynamicPage() {
         <div className="max-w-7xl mx-auto">
           <UserProfile user={data.user} tags={tagsData?.tagsData || []} />
 
-          <div className="flex flex-row space-x-4">
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Edit Profile
-            </button>
+          {data.user.id === user?.id && (
+            <div className="flex flex-row space-x-4">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Edit Profile
+              </button>
 
-            <button
-              onClick={() => setIsTagsModalOpen(true)}
-              className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Edit Tags
-            </button>
-          </div>
+              <button
+                onClick={() => setIsTagsModalOpen(true)}
+                className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Edit Tags
+              </button>
+            </div>
+          )}
         </div>
 
         {isModalOpen && (
@@ -89,7 +95,11 @@ export default function DynamicPage() {
                   ✕
                 </button>
               </div>
-              <EditAccount onSubmit={onSubmit} description={data.user.description} disabled={mutation.isPending} />
+              <EditAccount
+                onSubmit={onSubmit}
+                description={data.user.description}
+                disabled={mutation.isPending}
+              />
             </div>
           </div>
         )}
@@ -111,19 +121,21 @@ export default function DynamicPage() {
         )}
       </div>
 
-      <div className="flex flex-col w-[100%] lg:w-[70%]">
-        <div className="flex justify-end flex-wrap space-x-2">
+      <div className="flex flex-col-reverse w-[100%] lg:w-[70%] lg:flex-col">
+      {data.user.id === user?.id && <div className="flex justify-end flex-wrap space-x-2">
           <AddTechStack />
           <AddGroup />
         </div>
+}
 
         {(GroupsLoading || isFetching) && (
-  <div className="flex justify-center items-center">
-    <Loader />
-  </div>
-)}
+          <div className="flex justify-center items-center">
+            <Loader />
+          </div>
+        )}
         <div className="mt-8">
-          {!GroupsLoading && !isFetching &&
+          {!GroupsLoading &&
+            !isFetching &&
             GroupsData &&
             GroupsData.techGroups.map((group) => (
               <TechGroup
@@ -131,6 +143,8 @@ export default function DynamicPage() {
                 key={group.id}
                 name={group.name}
                 techs={group.techs}
+                position={group.position}
+                renderEdit={data.user.id === user?.id}
               />
             ))}
         </div>

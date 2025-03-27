@@ -50,7 +50,7 @@ function MultiSelectForm({ defaultValues, disabled, id }: MultiSelectFormProps) 
   return (
     <div className="p-4 max-w-xl">
       {isLoading ? (
-        <Skeleton className="h-10 w-full" /> // Loading state
+        <Skeleton className="h-10 w-full bg-black" /> // Loading state
       ) : (
         <MultiSelect
           options={techOptions}
