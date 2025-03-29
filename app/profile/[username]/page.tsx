@@ -15,6 +15,9 @@ import Loader from "@/components/Loader";
 import TechGroup from "@/components/TechGroup";
 import AddGroup from "@/components/AddGroupSheet";
 import { useGetUserGroup } from "@/features/group/use-get-byuser";
+import { useGetHero } from "@/features/hero/use-get-hero";
+import AddHero from "@/components/hero/AddHero";
+import HeroCard from "@/components/hero/HeroCard";
 
 export default function DynamicPage() {
   const { user } = useUser();
@@ -35,6 +38,7 @@ export default function DynamicPage() {
     isFetching,
   } = useGetUserGroup(name);
   const { data: tagsData } = useGetTagsByUser(name);
+  const { data: HeroData } = useGetHero(name);
 
   if (!data || !tagsData || userFetching) {
     return (
@@ -122,17 +126,32 @@ export default function DynamicPage() {
       </div>
 
       <div className="flex flex-col-reverse w-[100%] lg:w-[70%] lg:flex-col">
-      {data.user.id === user?.id && <div className="flex justify-end flex-wrap space-x-2">
-          <AddTechStack />
-          <AddGroup />
+        {data.user.id === user?.id && (
+          <div className="flex justify-end flex-wrap space-x-2">
+            <AddHero />
+            <AddTechStack />
+            <AddGroup />
+          </div>
+        )}
+
+        
+
+        <div className="px-6 py-2 flex flex-row space-x-2">
+          {HeroData?.hero?.map((value) => (
+
+            
+            <HeroCard key={value.id} title = {value.title} description={value.description} url = {value.url} favicon={value.faviconPath} id={value.id} render={data.user.id === user?.id}/>
+            
+          ))}
         </div>
-}
 
         {(GroupsLoading || isFetching) && (
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center h-[300px]">
             <Loader />
           </div>
         )}
+
+
         <div className="mt-8">
           {!GroupsLoading &&
             !isFetching &&

@@ -52,7 +52,7 @@ const EditGroup = ({ name, position, id,maxPosition }: EditGroupProps) => {
   return (
     <div>
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger className="">
           <div className=" ">
           <Pencil className="h-3 w-3 " />
           </div>
@@ -84,16 +84,19 @@ const EditGroup = ({ name, position, id,maxPosition }: EditGroupProps) => {
                 render={({ field }) => (
                   <FormItem className="flex-grow w-full">
                     <FormControl>
-                      <Input
-                        {...field}
-                        className="w-full"
-                        min="0"
-                        max={maxPosition}
-                        type="number"
-                        onChange={(e) =>
-                          field.onChange(Number(e.target.value) || 0)
-                        }
-                      />
+                    <Input
+  {...field}
+  className="w-full"
+  type="number"
+  min="0"
+  onBlur={field.onBlur}
+  name={field.name}
+  value={field.value}
+  onChange={(e) => {
+    const value = e.target.valueAsNumber;
+    field.onChange(isNaN(value) ? 0 : value);
+  }}
+/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

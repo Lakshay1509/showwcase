@@ -2,6 +2,7 @@ import { InferRequestType,InferResponseType } from "hono";
 import { useMutation,useQueryClient } from "@tanstack/react-query";
 
 import {client} from "@/lib/hono"
+import { toast } from "sonner";
 
 
 type ResponseType = InferResponseType<typeof client.api.tech.$post>
@@ -21,9 +22,10 @@ export const useCreateTech = ()=>{
         onSuccess:()=>{
             
             queryClient.invalidateQueries({queryKey:['tech']});
+            toast.success("Tech created successfully.");
         },
-        onError:(error)=>{
-            console.error(error);
+        onError:()=>{
+            toast.error("Failed to create tech");
             
         }
     })

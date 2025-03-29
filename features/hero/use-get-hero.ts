@@ -2,22 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
 
-export const useGetUsername = (username: string) => {
+export const useGetHero = (username: string) => {
   const query = useQuery({
     enabled: !!username,
-    queryKey: ["users"],
+    queryKey: ['hero', { username }],
     queryFn: async () => {
-      const response = await client.api.profile.username[":username"].$get({
+      const response = await client.api.hero.user[":username"].$get({
         param: { username },
       });
 
-      if (!response.ok) throw new Error("Failed to fetch account.");
+      if (!response.ok) throw new Error("Failed to fetch hero.");
 
       const data = await response.json();
 
-      
-      
-      // Return the data object or an empty object to avoid undefined
       return data || {};
     },
   });

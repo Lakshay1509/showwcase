@@ -20,17 +20,20 @@ const app = new Hono()
         if (!auth) {
             return ctx.json({ error: "Unauthorized." }, 401);
         }
-        try {
-            const tech = await db.tech.create({
+        
+        const tech = await db.tech.create({
                 data: {
                     ...values
                 }
-            });
+    });
+
+        if (tech) {
             return ctx.json({ tech });
-        } catch (error) {
-            console.error("Error creating tech:", error);
-            return ctx.json({ error: "Internal Server Error." }, 500);
         }
+
+        
+        return ctx.json({ error: "Error creating tech" }, 500);
+        
     })
     .get("/",clerkMiddleware(),async(ctx)=>{
 
@@ -45,7 +48,6 @@ const app = new Hono()
             return ctx.json({techs})
         }
         catch(error){
-            console.error("Error fetching techs:",error);
             return ctx.json({error:"Internal Server Error"},500)
         }
 

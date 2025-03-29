@@ -2,9 +2,10 @@ import {Hono} from "hono";
 import {handle} from "hono/vercel";
 import profile from "./profile";
 import tags from "./tags";
-import fetchMetadata from "./fetch-metadata";
+import fetchMetadata from "./metadata";
 import tech from "./tech";
 import group from './group'
+import hero from "./hero";
 
 export const runtime = "nodejs";
 const app = new Hono().basePath("/api");
@@ -13,9 +14,10 @@ const app = new Hono().basePath("/api");
 const routes = app
     .route("/profile", profile)
     .route("/tags", tags)
-    .route("/fetch-metadata", fetchMetadata)
+    .route("/metadata", fetchMetadata)
     .route("/tech", tech)
-    .route("/group",group);
+    .route("/group",group)
+    .route("/hero", hero);
 
 export const GET = handle(app);
 export const POST = handle(app);

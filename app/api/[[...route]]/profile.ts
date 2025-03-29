@@ -5,17 +5,25 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 
 const app = new Hono()
-  .get("/:id", clerkMiddleware(), async (ctx) => {
+  .get("/", clerkMiddleware(), async (ctx) => {
     const auth = getAuth(ctx);
-    const userId = ctx.req.param("id");
+    const userId = auth?.userId
 
-    if (!auth) {
+    if (!auth || !userId) {
       return ctx.json({ error: "Unauthorized." }, 401);
     }
 
     try {
       const user = await db.users.findUnique({
         where: { id: userId },
+        select:{
+          "username" : true,
+          "email" : true,
+          "name" : true,
+          "description": true,
+          "location" : true,
+          "profileImageUrl" : true,
+        }
       });
 
       if (!user) {

@@ -1,11 +1,23 @@
 import { Hono } from "hono";
 import * as cheerio from 'cheerio';
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 
-const app = new Hono();
+const app = new Hono()
+  .post("/", clerkMiddleware(),zValidator(
+    "json",
+    z.object({
+      url: z.string().url(),
+    })
+  ), async (c) => {
 
-app.post("/", async (c) => {
-  const body = await c.req.json();
-  const url = body.url;
+  const auth = getAuth(c);
+  if (!auth) {
+    return c.json({ error: "Unauthorized." }, 401);
+  }
+  const values = c.req.valid("json");
+  const url = values.url;
 
   if (!url || !/^https?:\/\//.test(url)) {
     return c.json({ error: "Invalid URL" }, 400);

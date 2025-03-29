@@ -10,19 +10,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { useDeleteAccount } from "@/features/group/use-delete-group";
+import { useDeleteHero } from "@/features/hero/use-delete-hero";
 import { Trash} from "lucide-react";
 
 
 
 
-interface DeleteGroupProps {
+interface DeleteHeroProps {
     id : string
 }
 
-const DeleteGroup = ({id}:DeleteGroupProps) => {
+const DeleteHero = ({id}:DeleteHeroProps) => {
 
-    const mutation = useDeleteAccount(id);
+    const mutation = useDeleteHero(id);
 
 
     const handleSubmit = () => {
@@ -40,7 +40,7 @@ const DeleteGroup = ({id}:DeleteGroupProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your group
+              This action cannot be undone. This will permanently delete your project 
               and remove your data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -56,4 +56,4 @@ const DeleteGroup = ({id}:DeleteGroupProps) => {
     )
 };
 
-export default DeleteGroup;
+export default DeleteHero;

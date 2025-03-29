@@ -13,40 +13,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import TechForm from "./TechForm";
-import { useCreateTech } from "@/features/tech/use-add-tech";
+
+
 import { useGetMetdata } from "@/features/tech/use-get-metadata";
+import NewHero from "./CreateNew";
 
 
 
-// Define form schema with Zod
 const formSchema = z.object({
   url: z.string().url({ message: "Please enter a valid URL" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const formSchema2 = z.object({
-  name: z.string().min(3, "Minimum 3 characters required").max(255),
-  img_url: z.string().url({ message: "Invalid image URL" }).optional()
-})
 
-type form2Values = z.infer<typeof formSchema2>;
-
-
-// Types for metadata\
 interface Metadata {
   websiteName?: string;
   title?: string;
   description?: string;
-  ogImage?: string;
   faviconPath?: string;
 }
 
 
-export default function MetadataForm() {
+export default function AddMetadataHero() {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
-  const mutation = useCreateTech();
   const Getmetdata = useGetMetdata();
 
   
@@ -56,17 +46,6 @@ export default function MetadataForm() {
         url: "",
         },
   });
-
- 
-  const onSubmit = (values: form2Values) => {
-    
-    mutation.mutate(values,{
-      onSuccess:()=>{
-        form.reset()
-      }
-    })
-    
-  }
 
   const handleSubmit = async (values: FormValues) => {
   
@@ -117,16 +96,7 @@ export default function MetadataForm() {
           </p>
 
           <div className="p-4 space-y-4">
-            {metadata.ogImage && (
-              <div className="relative h-40 w-full overflow-hidden rounded-md">
-                <Image
-                  src={metadata.ogImage}
-                  alt={metadata.title || "Website preview"}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
+            
             <div className="flex items-center gap-3">
               {metadata.faviconPath && (
                 <div className="relative h-8 w-8 flex-shrink-0">
@@ -157,14 +127,14 @@ export default function MetadataForm() {
       )}
 
       {metadata && (
-        <TechForm
-          defaultValues={{ 
-            name: metadata.websiteName || "",
-            img_url: metadata.faviconPath
-          }}
-          onSubmit={onSubmit}
-          disabled = {mutation.isPending}
-        />
+
+<NewHero defaultValues={{
+  url: form.getValues("url"),
+  title: metadata.title || "",
+  description: metadata.description || "",
+  faviconPath: metadata.faviconPath
+}}/>
+        
       )}
     </>
   );

@@ -1,10 +1,15 @@
 'use client'
 
 import { ClerkLoaded, ClerkLoading, UserButton, useAuth } from "@clerk/nextjs";
+import { useGetUser } from "@/features/users/use-get-user";
+
 import Link from "next/link";
 
 const Navbar = () => {
   const { isSignedIn } = useAuth();
+
+  const {data} = useGetUser();
+  
   
   return (
     <header className="fixed  inset-x-0 top-0 z-30 w-full py-4 shadow-lg backdrop-blur-md ">
@@ -22,6 +27,15 @@ const Navbar = () => {
             <ClerkLoading>
               <div className="h-9 w-9 animate-pulse rounded-full bg-gray-700/50" />
             </ClerkLoading>
+
+            {data && (
+  <div>
+    <Link href={`/profile/${data.user.username}`}>
+      Profile
+    </Link>
+  </div>
+)}
+
             
             <ClerkLoaded>
               {!isSignedIn ? (

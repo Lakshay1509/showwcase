@@ -19,6 +19,7 @@ model users {
   social_media_handles social_media_handles?
   user_tags  user_tags[]
   groups     groups[]  // Added relation field
+  hero_sections        hero_section[]
 }
 
 model social_media_handles {
@@ -80,4 +81,15 @@ model group_techs {
   @@map("group_techs")
 }
 
+
+model hero_section {
+  id           String @id @default(uuid())
+  user_id      String 
+  url          String 
+  title        String
+  description  String
+  faviconPath  String?
+
+  user         users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
 

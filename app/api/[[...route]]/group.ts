@@ -3,7 +3,6 @@ import { db } from "@/lib/prisma";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-
 import { createId } from "@paralleldrive/cuid2";
 
 const app = new Hono()
@@ -158,6 +157,15 @@ const app = new Hono()
   
       if (!auth || !auth.userId) {
         return ctx.json({ error: "Unauthorized" }, 401);
+      }
+
+      const group = await db.groups.findUnique({
+        where: { id: ctx.req.param("id") },
+        select: { user_id: true }, // Adjust based on your schema
+      });
+      
+      if (!group || group.user_id !== auth.userId) {
+        return ctx.json({ error: "Forbidden" }, 403);
       }
   
       await db.groups.update({

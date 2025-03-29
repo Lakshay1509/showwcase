@@ -13,7 +13,7 @@ export default function Home() {
   const { user } = useUser();
   const userId = user?.id ?? "";
 
-  const { data, isLoading } = useGetUser(userId);
+  const { data, isLoading } = useGetUser();
   const mutation = useCreateAccount();
   
   const [redirecting, setRedirecting] = useState(false);

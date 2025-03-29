@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
 
-export const useGetUser = (id: string) => {
+export const useGetUser = () => {
   const query = useQuery({
-    enabled: !!id,
-    queryKey: ["users", { id }],
+    
+    queryKey: ["users"],
     queryFn: async () => {
-      const response = await client.api.profile[":id"].$get({
-        param: { id },
+      const response = await client.api.profile.$get({
+        
       });
 
       if (!response.ok) throw new Error("Failed to fetch account.");
