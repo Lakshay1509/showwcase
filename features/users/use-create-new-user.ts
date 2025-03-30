@@ -2,6 +2,7 @@ import { InferRequestType,InferResponseType } from "hono";
 import { useMutation,useQueryClient } from "@tanstack/react-query";
 
 import {client} from "@/lib/hono"
+import { toast, Toaster } from "sonner";
 
 
 type ResponseType = InferResponseType<typeof client.api.profile.create.$post>
@@ -20,10 +21,12 @@ export const useCreateAccount = ()=>{
         },
         onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['users', 'group','tech', 'tags']});
+            queryClient.invalidateQueries({queryKey:['default']});
+            toast.success("Account created Successfully")
         },
         onError:(error)=>{
             console.error(error);
+            toast.error("Error creating account")
             
         }
     })

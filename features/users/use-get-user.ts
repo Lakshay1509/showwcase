@@ -5,7 +5,7 @@ import { client } from "@/lib/hono";
 export const useGetUser = () => {
   const query = useQuery({
     
-    queryKey: [""],
+    queryKey: ["default"],
     queryFn: async () => {
       const response = await client.api.profile.default.$get({
         

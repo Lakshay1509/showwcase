@@ -45,8 +45,13 @@ export default function Home() {
   type FormValues = z.infer<typeof formSchema>;
 
   const onSubmit = (values: FormValues) => {
-    mutation.mutate(values);
+    mutation.mutate(values, {
+      onSuccess: () => {
+        router.replace(`/profile/${values.username}`);
+      }
+    });
   };
+  
 
   return (
     <div className="min-h-screen py-8 mt-20">
