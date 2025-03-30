@@ -5,7 +5,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 
 const app = new Hono()
-  .get("/", clerkMiddleware(), async (ctx) => {
+  .get("/default", clerkMiddleware(), async (ctx) => {
     const auth = getAuth(ctx);
     const userId = auth?.userId
 
@@ -13,7 +13,7 @@ const app = new Hono()
       return ctx.json({ error: "Unauthorized." }, 401);
     }
 
-    try {
+    
       const user = await db.users.findUnique({
         where: { id: userId },
       });
@@ -21,12 +21,7 @@ const app = new Hono()
       if (!user) {
         return ctx.json({ error: "User not found." }, 404);
       }
-
-      return ctx.json({ user });
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      return ctx.json({ error: "Internal Server Error." }, 500);
-    }
+      return ctx.json({ user },200);
   })
   
 

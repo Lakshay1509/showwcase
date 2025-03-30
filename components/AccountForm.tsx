@@ -25,9 +25,10 @@ type FormValues = z.infer<typeof formSchema>;
 
 type AccountFormProps = {
   onSubmit: (values: FormValues) => void;
+  disabled? : boolean
 };
 
-const AccountForm = ({ onSubmit }: AccountFormProps) => {
+const AccountForm = ({ onSubmit,disabled }: AccountFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,6 +64,7 @@ const AccountForm = ({ onSubmit }: AccountFormProps) => {
                     <FormControl>
                       <Input 
                         {...field} 
+                        disabled = {disabled}
                         placeholder="Enter your username"
                         className="focus:ring-2 focus:ring-primary/20"
                       />
@@ -84,6 +86,7 @@ const AccountForm = ({ onSubmit }: AccountFormProps) => {
                     <FormControl>
                       <Textarea 
                         {...field} 
+                        disabled = {disabled}
                         placeholder="Tell us about yourself"
                         className="min-h-24 resize-none focus:ring-2 focus:ring-primary/20"
                       />
@@ -101,9 +104,9 @@ const AccountForm = ({ onSubmit }: AccountFormProps) => {
               <Button 
                 type="submit"
                 className="w-full sm:w-auto px-8 transition-all hover:scale-105"
-                disabled={form.formState.isSubmitting}
+                disabled={disabled}
               >
-                {form.formState.isSubmitting ? "Submitting..." : "Save Profile"}
+                 Save Profile
               </Button>
             </CardFooter>
           </form>

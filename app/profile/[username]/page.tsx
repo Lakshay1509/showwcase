@@ -35,6 +35,8 @@ export default function DynamicPage() {
   const name = decodeURIComponent(rawName);
   
   const { data, isFetching: userFetching } = useGetUsername(name);
+
+  
   const {
     data: GroupsData,
     isLoading: GroupsLoading,

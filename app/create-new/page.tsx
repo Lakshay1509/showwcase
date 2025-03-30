@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import { useGetUser } from "@/features/users/use-get-user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   const router = useRouter();
@@ -26,7 +27,14 @@ export default function Home() {
   }, [userId, isLoading, data, router]);
 
   
-  if (redirecting || isLoading) return null;
+  if (redirecting || isLoading) {
+
+    return (
+      <div className="flex justify-center items-center w-full h-screen">
+      <Loader/>
+      </div>
+    )
+  }
 
   
   const formSchema = z.object({
@@ -41,13 +49,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen py-8">
+    <div className="min-h-screen py-8 mt-20">
       <div className="flex flex-col items-center space-y-6">
         <h1 className="text-4xl font-bold text-gray-800">
           Hi, {user?.firstName}!
         </h1>
         <p>Pick a username & flex a little!</p>
-        <AccountForm onSubmit={onSubmit} />
+        <AccountForm onSubmit={onSubmit} disabled={mutation.isPending}  />
       </div>
     </div>
   );
