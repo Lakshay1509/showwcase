@@ -7,9 +7,8 @@ import Link from "next/link";
 
 const Navbar = () => {
   const { isSignedIn } = useAuth();
-
-  const {data} = useGetUser();
   
+  const { data, isLoading } = useGetUser();
   
   return (
     <header className="fixed  inset-x-0 top-0 z-30 w-full py-4 shadow-lg backdrop-blur-md ">
@@ -28,12 +27,13 @@ const Navbar = () => {
               <div className="h-9 w-9 animate-pulse rounded-full bg-gray-700/50" />
             </ClerkLoading>
 
-            {data && (
-  <div>
-    <Link href={`/profile/${data.user.username}`}>
-      Profile
-    </Link>
-  </div>
+            {data?.user?.username && !isLoading && isSignedIn && (
+  <a
+    href={`/profile/${data.user.username}`}
+    className="inline-flex items-center justify-center rounded-xl bg-gray-800/50 px-4 py-2 text-sm font-medium text-gray-200 shadow-sm ring-1 ring-gray-700/50 transition-all duration-300 hover:bg-gray-700/50 hover:text-white"
+  >
+    Profile
+  </a>
 )}
 
             

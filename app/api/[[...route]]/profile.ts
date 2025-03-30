@@ -16,14 +16,6 @@ const app = new Hono()
     try {
       const user = await db.users.findUnique({
         where: { id: userId },
-        select:{
-          "username" : true,
-          "email" : true,
-          "name" : true,
-          "description": true,
-          "location" : true,
-          "profileImageUrl" : true,
-        }
       });
 
       if (!user) {

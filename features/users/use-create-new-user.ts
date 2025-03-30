@@ -20,7 +20,7 @@ export const useCreateAccount = ()=>{
         },
         onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['users']});
+            queryClient.invalidateQueries({queryKey:['users', 'group','tech', 'tags']});
         },
         onError:(error)=>{
             console.error(error);

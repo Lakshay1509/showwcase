@@ -28,9 +28,12 @@ export default function DynamicPage() {
   const params = useParams();
   const rawName = Array.isArray(params?.username)
     ? params.username[0]
-    : params?.username || "Guest";
+    : params?.username || "";
+
+  
 
   const name = decodeURIComponent(rawName);
+  
   const { data, isFetching: userFetching } = useGetUsername(name);
   const {
     data: GroupsData,
@@ -39,6 +42,8 @@ export default function DynamicPage() {
   } = useGetUserGroup(name);
   const { data: tagsData } = useGetTagsByUser(name);
   const { data: HeroData } = useGetHero(name);
+
+  
 
   if (!data || !tagsData || userFetching) {
     return (

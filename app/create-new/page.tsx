@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     if (userId && !isLoading && data) {
       setRedirecting(true);
-      router.replace("/profile/" + data.user.username);
+      router.replace("/");
     }
   }, [userId, isLoading, data, router]);
 
