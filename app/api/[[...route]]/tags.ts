@@ -10,14 +10,15 @@ const app = new Hono()
         if(!auth){
             return ctx.json({error:"Unauthorized"},401)
         }
-        try{
+        
             const tags = await db.tags.findMany();
+            if(!tags){
+              return ctx.json({error:"Error"},500)
+            }
             return ctx.json({tags})
-        }catch(error){
-            console.error("Error fetching tags:",error);
-            return ctx.json({error:"Internal Server Error"},500)
+            
         }
-    })
+    )
 
 
     .get("/user/:username", clerkMiddleware(), async (ctx) => {

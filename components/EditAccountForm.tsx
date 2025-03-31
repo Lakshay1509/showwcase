@@ -33,6 +33,7 @@ type FormValues = z.infer<typeof formSchema>;
 type AccountFormProps = {
   onSubmit: (values: FormValues) => void;
   description: string | null;
+  country: string | null;
   disabled?: boolean;
   
 };
@@ -43,7 +44,7 @@ type Country = {
   region: string;
 };
 
-const EditAccount = ({ onSubmit,description,disabled }: AccountFormProps) => {
+const EditAccount = ({ onSubmit,description,disabled,country }: AccountFormProps) => {
   const [countries, setCountries] = useState<Record<string, Country>>({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -77,6 +78,10 @@ const EditAccount = ({ onSubmit,description,disabled }: AccountFormProps) => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      description: description || '',
+      location: country || '',
+    }
   });
 
   return (
@@ -103,6 +108,7 @@ const EditAccount = ({ onSubmit,description,disabled }: AccountFormProps) => {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                         disabled={disabled}
+                        
                       >
                         <SelectTrigger className="focus:ring-2 focus:ring-primary/20">
                           <SelectValue placeholder="Select your country" />
@@ -135,7 +141,6 @@ const EditAccount = ({ onSubmit,description,disabled }: AccountFormProps) => {
                 name="description"
                 disabled={disabled}
                 control={form.control}
-                defaultValue={description || ''}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-foreground">

@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 
 const EditTagsForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { data: tags, error } = useGetTags();
-  console.log(tags);
   const [selectedTags, setSelectedTags] = useState<Array<{ id: number; name: string }>>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -76,6 +75,7 @@ const EditTagsForm = ({ onSuccess }: { onSuccess?: () => void }) => {
                     className="text-blue-700 hover:text-blue-900 font-bold ml-1"
                     onClick={(e) => {
                       e.stopPropagation();
+                      
                       removeTag(tag.id);
                     }}
                   >

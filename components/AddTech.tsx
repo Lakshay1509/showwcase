@@ -63,6 +63,7 @@ export default function MetadataForm() {
     mutation.mutate(values,{
       onSuccess:()=>{
         form.reset()
+        setMetadata(null)
       }
     })
     

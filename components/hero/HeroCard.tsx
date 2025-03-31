@@ -41,7 +41,7 @@ const HeroCard = ({ title, description, url, favicon ,id,render}: HeroCard) => {
           {description}
         </CardDescription>
       </CardHeader>
-      <CardFooter className="flex justify-end space-x-4">
+      <CardFooter className="flex justify-between space-x-4">
       {render && <DeleteHero id={id}/>}
         <a
           href={url}

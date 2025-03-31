@@ -9,7 +9,6 @@ import { useUser } from "@clerk/nextjs";
 import { z } from "zod";
 import { useState } from "react";
 import AddTechStack from "@/components/AddTechStack";
-import EditTagsForm from "@/components/EditTagsForm";
 import { useGetTagsByUser } from "@/features/tags/use-get-byUser";
 import Loader from "@/components/Loader";
 import TechGroup from "@/components/TechGroup";
@@ -18,6 +17,10 @@ import { useGetUserGroup } from "@/features/group/use-get-byuser";
 import { useGetHero } from "@/features/hero/use-get-hero";
 import AddHero from "@/components/hero/AddHero";
 import HeroCard from "@/components/hero/HeroCard";
+import MultiSelectTags from "@/components/tags/MultiSelectTags";
+import { useGetTags } from "@/features/tags/use-get-tags";
+import EditTagsSheet from "@/components/tags/EditTagsSheet";
+
 
 export default function DynamicPage() {
   const { user } = useUser();
@@ -42,12 +45,13 @@ export default function DynamicPage() {
     isLoading: GroupsLoading,
     isFetching,
   } = useGetUserGroup(name);
-  const { data: tagsData } = useGetTagsByUser(name);
-  const { data: HeroData } = useGetHero(name);
+  const { data: tagsData, isFetching:TagsFetching } = useGetTagsByUser(name);
+  const { data: HeroData , isFetching:HeroFetching} = useGetHero(name);
+  
 
   
 
-  if (!data || !tagsData || userFetching) {
+  if (!data || !tagsData || userFetching || GroupsLoading || HeroFetching || TagsFetching) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />
@@ -63,35 +67,34 @@ export default function DynamicPage() {
   type FormValues = z.infer<typeof formSchema>;
 
   const onSubmit = (values: FormValues) => {
-    mutation.mutate(values);
-    if (mutation.isSuccess) {
-      setIsModalOpen(false);
-    }
+    mutation.mutate(values,{
+      onSuccess: () => {
+        setIsModalOpen(false);
+      },
+    });
   };
 
   return (
     <main className="min-h-screen mt-12 w-full py-12 px-4 bg-background flex flex-col lg:flex-row ">
-      <div className="">
+      <div className="w-[30%]">
         <div className="max-w-7xl mx-auto">
           <UserProfile user={data.user} tags={tagsData?.tagsData || []} />
 
           {data.user.id === user?.id && (
-            <div className="flex flex-row space-x-4">
+            <div className="flex flex-row space-x-4 justify-start items-center">
+              <div>
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
               >
                 Edit Profile
               </button>
-
-              <button
-                onClick={() => setIsTagsModalOpen(true)}
-                className="mt-4 px-2 py-1  bg-black text-sm text-white rounded-md hover:bg-gray-700 transition-colors"
-              >
-                Edit Tags
-              </button>
+              </div>
+              <EditTagsSheet defaultValues={tagsData?.tagsData?.map(tag => String(tag.id)) || []}/>
+              
             </div>
           )}
+          
         </div>
 
         {isModalOpen && (
@@ -110,26 +113,14 @@ export default function DynamicPage() {
                 onSubmit={onSubmit}
                 description={data.user.description}
                 disabled={mutation.isPending}
+                country={data.user.location}
               />
             </div>
           </div>
         )}
 
-        {isTagsModalOpen && (
-          <div className="fixed inset-0 backdrop-blur-sm  bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-              <div className="flex justify-between items-center mb-4">
-                <button
-                  onClick={() => setIsTagsModalOpen(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  ✕
-                </button>
-              </div>
-              <EditTagsForm />
-            </div>
-          </div>
-        )}
+        
+        
       </div>
 
       <div className="flex flex-col-reverse w-[100%] lg:w-[70%] lg:flex-col">

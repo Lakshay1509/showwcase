@@ -20,7 +20,7 @@ export const useCreateHero = ()=>{
         },
         onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['group', 'hero']});
+            queryClient.invalidateQueries({queryKey:['hero']});
             toast.success("Created Successfully")
         },
         onError:(error)=>{

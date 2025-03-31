@@ -44,19 +44,21 @@ export function UserProfile({ user,tags }: UserProfileProps) {
             
 
           </div>
+         
         </CardHeader>
 
-        <div className="flex flex-row flex-wrap justify-center space-x-4 space-y-3 p-3">
-        {tags && 
-          tags?.map(tag => (
-          <Badge variant="secondary" className="px-2 py-2" key={tag.id}>
+        <div className="flex flex-row flex-wrap justify-center space-x-4 space-y-3 p-3 min-h-[40px] w-full">
+        {tags && tags.length > 0 ? (
+          tags.map(tag => (
+          <Badge variant="secondary" className="h-7  flex items-center justify-center" key={tag.id}>
             <FaHashtag className="h-2 w-2 mr-2" />
             {tag.name}
           </Badge>
-          ))}
-
+          ))
+        ) : (
+          <div className="w-full"></div>
+        )}
         </div>
-
 
         <CardContent className="space-y-4">
           

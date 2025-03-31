@@ -10,9 +10,6 @@ type RequestType = InferRequestType<(typeof client.api.profile.update)[":id"]["$
 
 export const useEditAccount = (id:string)=>{
 
-    // if(id === " "){
-    //     throw new Error("User id is required");
-    // }
 
     const queryClient = useQueryClient();
 

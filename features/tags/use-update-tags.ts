@@ -2,6 +2,7 @@ import { InferRequestType,InferResponseType } from "hono";
 import { useMutation,useQueryClient } from "@tanstack/react-query";
 
 import {client} from "@/lib/hono"
+import { toast } from "sonner";
 
 
 type ResponseType = InferResponseType<(typeof client.api.tags.update)["$post"]>
@@ -23,10 +24,12 @@ export const useUpdateTags = ()=>{
         },
         onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['tags','get']});
+            queryClient.invalidateQueries({queryKey:['tags']});
+            toast.success("Tags updated successfully!");
         },
         onError:(error)=>{
             console.error(error);
+            toast.error("Failed to update tags. Please try again.");
             
         }
     })

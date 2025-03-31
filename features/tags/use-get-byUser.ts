@@ -16,9 +16,6 @@ export const useGetTagsByUser = (username:string) => {
       if (!response.ok) throw new Error("Failed to fetch account.");
 
       const data = await response.json();
-
-      
-      
      
       return data || {};
     },
