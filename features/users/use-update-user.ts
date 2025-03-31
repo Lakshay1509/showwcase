@@ -5,8 +5,8 @@ import { toast } from "sonner";
 import {client} from "@/lib/hono"
 
 
-type ResponseType = InferResponseType<(typeof client.api.profile.update)[":id"]["$patch"]>
-type RequestType = InferRequestType<(typeof client.api.profile.update)[":id"]["$patch"]>["json"]
+type ResponseType = InferResponseType<(typeof client.api.profile.update)["$patch"]>
+type RequestType = InferRequestType<(typeof client.api.profile.update)["$patch"]>["json"]
 
 export const useEditAccount = (id:string)=>{
 
@@ -16,18 +16,18 @@ export const useEditAccount = (id:string)=>{
     return useMutation<ResponseType,Error,RequestType>
     ({
         mutationFn : async(json)=>{
-            const response = await client.api.profile.update[":id"]["$patch"]({
+            const response = await client.api.profile.update["$patch"]({
                 json,
-                param:{
-                    id
-                }
+                
             });
+
 
             return response.json();
         },
         onSuccess:()=>{
             
             queryClient.invalidateQueries({queryKey:['users']});
+            queryClient.invalidateQueries({queryKey:['default']});
             toast.success("Account updated successfully");
             
         },

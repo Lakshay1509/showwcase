@@ -3,6 +3,7 @@ import { db } from "@/lib/prisma";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
+import { createId } from "@paralleldrive/cuid2";
 
 const app = new Hono()
   .get("/default", clerkMiddleware(), async (ctx) => {
@@ -97,6 +98,14 @@ const app = new Hono()
           },
         });
 
+        const group = await db.groups.create({
+          data: {
+            user_id: auth.userId,
+            id: createId(),
+            name : `${values.username}'s group`,
+          }
+        });
+
         return ctx.json({ data });
       } catch (error) {
         console.error("Error creating user:", error);
@@ -105,23 +114,26 @@ const app = new Hono()
     }
   )
   .patch(
-    "/update/:id",clerkMiddleware(),zValidator(
+    "/update",clerkMiddleware(),zValidator(
       "json",
       z.object({
         description: z.string().min(10).max(100),
         location: z.string().min(3).max(50),
+        username : z.string().min(3).max(50),
       })
     ),
     async (ctx) => {
       const auth = getAuth(ctx);
-      const userId = ctx.req.param("id");
+      
       const values = ctx.req.valid("json");
 
-      if (!auth) {
+      if (!auth || !auth.userId) {
         return ctx.json({ error: "Unauthorized." }, 401);
       }
 
-      try {
+        const userId = auth.userId;
+
+      
         const user = await db.users.findUnique({
           where: { id: userId },
         });
@@ -139,11 +151,12 @@ const app = new Hono()
           data: values,
         });
 
+        if(!data){
+          return ctx.json({ error: "Internal Server Error." }, 500);
+        }
+
         return ctx.json({ data });
-      } catch (error) {
-        console.error("Error updating user:", error);
-        return ctx.json({ error: "Internal Server Error." }, 500);
-      }
+    
     }
   )
   

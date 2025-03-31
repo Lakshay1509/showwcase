@@ -39,7 +39,7 @@ const TechGroup = ({name, techs ,id,renderEdit,position}: TechGroup) => {
         <Separator />
 
 
-        <div className="p-2 flex flex-row flex-wrap justify-start items-center space-x-3  ">
+        <div className="p-2 flex flex-row flex-wrap justify-start items-center space-x-3   ">
           {techs && techs.map((tech) => (
             <Badge
               key={tech.id}

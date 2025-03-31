@@ -20,10 +20,12 @@ import HeroCard from "@/components/hero/HeroCard";
 import MultiSelectTags from "@/components/tags/MultiSelectTags";
 import { useGetTags } from "@/features/tags/use-get-tags";
 import EditTagsSheet from "@/components/tags/EditTagsSheet";
+import { useRouter } from "next/navigation";
 
 
 export default function DynamicPage() {
   const { user } = useUser();
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
 
@@ -62,6 +64,7 @@ export default function DynamicPage() {
   const formSchema = z.object({
     description: z.string().min(10).max(100),
     location: z.string().min(3).max(50),
+    username : z.string().min(3).max(50),
   });
 
   type FormValues = z.infer<typeof formSchema>;
@@ -70,6 +73,7 @@ export default function DynamicPage() {
     mutation.mutate(values,{
       onSuccess: () => {
         setIsModalOpen(false);
+        router.replace(`/profile/${values.username}`);
       },
     });
   };
@@ -114,6 +118,7 @@ export default function DynamicPage() {
                 description={data.user.description}
                 disabled={mutation.isPending}
                 country={data.user.location}
+                username= {data.user.username}
               />
             </div>
           </div>

@@ -22,10 +22,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "./ui/input";
 
 const formSchema = z.object({
   description: z.string().min(10).max(100),
   location: z.string().min(2).max(50),
+  username : z.string().min(3).max(50),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -34,6 +36,7 @@ type AccountFormProps = {
   onSubmit: (values: FormValues) => void;
   description: string | null;
   country: string | null;
+  username : string
   disabled?: boolean;
   
 };
@@ -44,7 +47,7 @@ type Country = {
   region: string;
 };
 
-const EditAccount = ({ onSubmit,description,disabled,country }: AccountFormProps) => {
+const EditAccount = ({ onSubmit,description,disabled,country,username }: AccountFormProps) => {
   const [countries, setCountries] = useState<Record<string, Country>>({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -81,6 +84,7 @@ const EditAccount = ({ onSubmit,description,disabled,country }: AccountFormProps
     defaultValues: {
       description: description || '',
       location: country || '',
+      username: username 
     }
   });
 
@@ -97,6 +101,31 @@ const EditAccount = ({ onSubmit,description,disabled,country }: AccountFormProps
             className="space-y-6"
           >
             <CardContent className="space-y-4">
+
+            <FormField
+                name="username"
+                disabled={disabled}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-foreground">
+                      Username
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Username"
+                        className=" resize-none focus:ring-2 focus:ring-primary/20"
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Edit your username
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 name="location"
                 control={form.control}
