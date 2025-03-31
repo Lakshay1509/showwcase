@@ -21,7 +21,7 @@ interface TechGroup {
 
 const TechGroup = ({name, techs ,id,renderEdit,position}: TechGroup) => {
   return (
-    <main className="px-6 py-2 flex flex-col space-y-2  ">
+    <main className=" py-2 flex flex-col space-y-2 lg:px-6 ">
       <div>
         <div className="flex flex-row w-full items-center justify-between">
           <div className="flex flex-row items-center justify-center space-x-1">

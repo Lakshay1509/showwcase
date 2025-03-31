@@ -76,7 +76,7 @@ export default function DynamicPage() {
 
   return (
     <main className="min-h-screen mt-12 w-full py-12 px-4 bg-background flex flex-col lg:flex-row ">
-      <div className="w-[30%]">
+      <div className="lg:w-[30%]">
         <div className="max-w-7xl mx-auto">
           <UserProfile user={data.user} tags={tagsData?.tagsData || []} />
 
@@ -134,7 +134,7 @@ export default function DynamicPage() {
 
         
 
-        <div className="px-6 py-2 flex flex-row space-x-2">
+        <div className="my-4 flex flex-row space-x-2 flex-wrap lg:px-6 lg:py-2">
           {HeroData?.hero?.map((value) => (
 
             
