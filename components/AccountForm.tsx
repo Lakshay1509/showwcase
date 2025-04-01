@@ -17,8 +17,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 
 const formSchema = z.object({
-  username: z.string().min(3).max(20),
+  username : z.string().min(3).max(50).regex(/^[^\s]+$/, "Username cannot contain spaces"),
   description: z.string().min(10).max(100),
+  
+  
 });
 
 type FormValues = z.infer<typeof formSchema>;

@@ -13,29 +13,41 @@ export const useEditAccount = (id:string)=>{
 
     const queryClient = useQueryClient();
 
-    return useMutation<ResponseType,Error,RequestType>
-    ({
-        mutationFn : async(json)=>{
-            const response = await client.api.profile.update["$patch"]({
-                json,
-                
-            });
+    return useMutation<ResponseType, Error, RequestType>({
+        mutationFn: async (json: RequestType) => {
+            
+                const response = await client.api.profile.update["$patch"]({ json });
 
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        toast.error("Username already exists");
+                    } else {
+                        toast.error("Failed to update account");
+                    }
+                    throw new Error("Failed request");
+                }
 
-            return response.json();
+                const data = await response.json();
+                queryClient.invalidateQueries({ queryKey: ["default"] });
+                queryClient.invalidateQueries({ queryKey: ["users"] });
+                toast.success("Account updated successfully");
+                return data;
+
+            
         },
-        onSuccess:()=>{
+    
+        // onSuccess:()=>{
             
-            queryClient.invalidateQueries({queryKey:['users']});
-            queryClient.invalidateQueries({queryKey:['default']});
-            toast.success("Account updated successfully");
+        //     queryClient.invalidateQueries({queryKey:['users']});
+        //     queryClient.invalidateQueries({queryKey:['default']});
+        //     toast.success("Account updated successfully");
             
-        },
-        onError:(error)=>{
-            console.error(error);
-            toast.error("Failed to update account");
+        // },
+        // onError:()=>{
             
-        }
+        //     toast.error("Failed to update account");
+            
+        // }
     })
 
     

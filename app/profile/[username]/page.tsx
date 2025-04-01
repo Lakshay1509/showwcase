@@ -73,7 +73,7 @@ export default function DynamicPage() {
     mutation.mutate(values,{
       onSuccess: () => {
         setIsModalOpen(false);
-        router.replace(`/profile/${values.username}`);
+        router.replace(`/profile/${values.username}`)
       },
     });
   };

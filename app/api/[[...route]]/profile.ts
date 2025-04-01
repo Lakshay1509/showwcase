@@ -146,6 +146,14 @@ const app = new Hono()
           return ctx.json({ error: "Unauthorized." }, 401);
         }
 
+        const findUser = await db.users.findUnique({
+          where: { username: values.username },
+        })
+
+        if (findUser && findUser.id !== userId) {
+          return ctx.json({ error: "Username already exists." }, 409);
+        }
+        
         const data = await db.users.update({
           where: { id: userId },
           data: values,

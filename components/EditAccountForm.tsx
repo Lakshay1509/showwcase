@@ -27,7 +27,7 @@ import { Input } from "./ui/input";
 const formSchema = z.object({
   description: z.string().min(10).max(100),
   location: z.string().min(2).max(50),
-  username : z.string().min(3).max(50),
+  username : z.string().min(3).max(50).regex(/^[^\s]+$/, "Username cannot contain spaces"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
